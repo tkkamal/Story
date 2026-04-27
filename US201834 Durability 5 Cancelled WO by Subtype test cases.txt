@@ -1,0 +1,147 @@
+Test Cases: Page 5 | Closed WO Overview
+Story: Consolidated Table on Closed WO Overview Page
+================================================================================
+
+TC-001: Page Rename Verification
+--------------------------------------------------------------------------------
+Given: The Power BI report is open
+When:  I navigate to page 5
+Then:  The page tab should display "5 | Closed WO Overview"
+And:   The old page name "5 | Cancelled WO by Subtype" should no longer be visible
+
+TC-002: Single Consolidated Table Presence
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The page loads completely
+Then:  There should be exactly one table visible on the page
+And:   The two previously separate tables should no longer exist
+
+TC-003: Table Column Headers Verification
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The consolidated table loads
+Then:  The table should contain exactly the following columns in order:
+         1. Area
+         2. BU
+         3. Division
+         4. Completed
+         5. Pending P-Card Completion
+         6. Pending QCI
+         7. Closed
+         8. Closed of Completed %
+         9. WO Total
+And:   No additional or missing columns should be present
+
+TC-004: Table Displays Data Rows
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The consolidated table loads with available data
+Then:  Each row should display values for Area, BU, and Division
+And:   The numeric columns (Completed, Pending P-Card Completion, Pending QCI, Closed, WO Total) should show whole number counts
+And:   The "Closed of Completed %" column should display a percentage value
+
+TC-005: Closed of Completed % Calculation - Standard Case
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  A row has the following values:
+         Closed = 80
+         Completed = 10
+         Pending P-Card Completion = 5
+         Pending QCI = 5
+Then:  The "Closed of Completed %" should calculate as:
+         80 / (80 + 10 + 5 + 5) = 80 / 100 = 80.00%
+
+TC-006: Closed of Completed % — Only WOs with Non-Null Actual Completion Date
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The dataset contains WOs where some have a null Actual Completion Date
+Then:  Only WOs with a non-null Actual Completion Date should be included in the
+         "Closed of Completed %" calculation
+And:   WOs with a null Actual Completion Date should be excluded from the numerator
+         and denominator of the percentage
+
+TC-007: Closed of Completed % — Zero Denominator Handling
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  A row has Closed = 0, Completed = 0, Pending P-Card Completion = 0, Pending QCI = 0
+Then:  The "Closed of Completed %" should display as 0% or blank (no divide-by-zero error)
+And:   No error message or broken visual should appear in the table
+
+TC-008: Compliance Goal Indicator — 90% Target Displayed
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The page loads
+Then:  A compliance goal indicator should be visible on the page
+And:   The indicator should show 90% as the "Closed of Completed" target
+
+TC-009: Compliance Goal Indicator — Values Below Target
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  A row's "Closed of Completed %" value is below 90%
+Then:  The compliance indicator or row formatting should visually distinguish
+         it as below the 90% target (e.g., red color, down arrow, or equivalent visual)
+
+TC-010: Compliance Goal Indicator — Values At or Above Target
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  A row's "Closed of Completed %" value is 90% or above
+Then:  The compliance indicator or row formatting should visually distinguish
+         it as meeting or exceeding the 90% target (e.g., green color, check mark, or equivalent visual)
+
+TC-011: Column Sort — Ascending Order
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  I click a column header (e.g., "Closed of Completed %")
+Then:  The table rows should sort in ascending order based on that column's values
+And:   A sort indicator (e.g., up arrow) should appear on the column header
+
+TC-012: Column Sort — Descending Order
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  I click the same column header a second time
+Then:  The table rows should sort in descending order based on that column's values
+And:   A sort indicator (e.g., down arrow) should appear on the column header
+
+TC-013: Column Sort — All Columns Are Sortable
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  I click each column header individually:
+         Area, BU, Division, Completed, Pending P-Card Completion,
+         Pending QCI, Closed, Closed of Completed %, WO Total
+Then:  Each column header should respond to a click and sort the table accordingly
+And:   No column should be non-interactive or unresponsive to clicks
+
+TC-014: Column Sort — Toggle Between Ascending and Descending
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  I click a column header once (ascending) and then click it again (descending)
+Then:  The sort direction should toggle correctly between ascending and descending
+And:   A third click should reset to the default sort order or cycle back to ascending
+
+TC-015: WO Total Column Accuracy
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  A row has data values across Completed, Pending P-Card Completion, Pending QCI, and Closed
+Then:  The "WO Total" column should reflect the total work orders associated with that row
+And:   The value should be consistent with the sum of the relevant WO statuses
+
+TC-016: Cross-Page Filter Consistency
+--------------------------------------------------------------------------------
+Given: A filter or slicer is applied on another page of the report
+When:  I navigate to page "5 | Closed WO Overview"
+Then:  The consolidated table should reflect the applied filter context
+And:   The "Closed of Completed %" and WO Total values should update accordingly
+
+TC-017: Table Renders Without Errors on Page Load
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  The page loads with data available
+Then:  The consolidated table should render completely without any visual errors,
+         blank panels, or loading spinners that do not resolve
+
+TC-018: Empty State — No Data Available
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Overview"
+When:  All filters result in no matching data
+Then:  The table should display an appropriate empty state message (e.g., "No data available")
+And:   The "Closed of Completed %" compliance indicator should also reflect the empty state gracefully
