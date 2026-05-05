@@ -145,3 +145,113 @@ Given: I am viewing page "5 | Closed WO Overview"
 When:  All filters result in no matching data
 Then:  The table should display an appropriate empty state message (e.g., "No data available")
 And:   The "Closed of Completed %" compliance indicator should also reflect the empty state gracefully
+
+
+
+-------------------- Additional test Cases
+
+Test Cases: Page 5 | Closed WO Details
+Story: Individual WO Records on Closed WO Details Page (renamed from 5 | Canceled FOUND ON PMI and VCR NON-SAFETY)
+================================================================================
+
+TC-019: Page Rename Verification
+--------------------------------------------------------------------------------
+Given: The Power BI report is open
+When:  I navigate to the details page
+Then:  The page tab should display "5 | Closed WO Details"
+And:   The old page name "5 | Canceled FOUND ON PMI and VCR NON-SAFETY" should no longer be visible
+
+TC-020: Table Shows Individual WO Records
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The page loads with available data
+Then:  The table should display one row per individual Work Order (not aggregated/grouped)
+And:   Each row should represent a unique WO record
+
+TC-021: Only Allowed Statuses Are Displayed — Completed
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The table loads
+Then:  WOs with status "Completed" should be visible in the table
+
+TC-022: Only Allowed Statuses Are Displayed — Pending QCI
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The table loads
+Then:  WOs with status "Pending QCI" should be visible in the table
+
+TC-023: Only Allowed Statuses Are Displayed — Pending P-Card Completion
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The table loads
+Then:  WOs with status "Pending P-Card Completion" should be visible in the table
+
+TC-024: Canceled WOs Are Excluded
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The table loads
+Then:  No WOs with status "Canceled" should appear in the table
+And:   The table should only contain WOs with status Completed, Pending QCI, or Pending P-Card Completion
+
+TC-025: Rows Filtered to Non-Null Actual Completion Date Only
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The dataset contains WOs where some have a null Actual Completion Date
+Then:  Only WOs with a non-null Actual Completion Date should appear as rows in the table
+And:   WOs with a null Actual Completion Date should be completely excluded from the table
+
+TC-026: Column Layout Consistent with Closed WO Overview Feed
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The table loads
+Then:  The column layout should be consistent with the columns that feed into the
+         "Closed WO Overview" page calculation (Area, BU, Division, and relevant WO fields)
+And:   No columns present in the Overview feed should be missing from this detail view
+
+TC-027: Column Sort — Ascending Order
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  I click a column header (e.g., "Actual Completion Date")
+Then:  The table rows should sort in ascending order based on that column's values
+And:   A sort indicator (e.g., up arrow) should appear on the column header
+
+TC-028: Column Sort — Descending Order
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  I click the same column header a second time
+Then:  The table rows should sort in descending order based on that column's values
+And:   A sort indicator (e.g., down arrow) should appear on the column header
+
+TC-029: Column Sort — All Column Headers Are Sortable
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  I click each column header individually
+Then:  Each column header should respond to a click and sort the table accordingly
+And:   No column should be non-interactive or unresponsive to clicks
+
+TC-030: Column Sort — Toggle Between Ascending and Descending
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  I click a column header once (ascending) and then click it again (descending)
+Then:  The sort direction should toggle correctly between ascending and descending
+
+TC-031: Cross-Page Filter Consistency
+--------------------------------------------------------------------------------
+Given: A filter or slicer is applied on the "5 | Closed WO Overview" page
+When:  I navigate to page "5 | Closed WO Details"
+Then:  The detail table should reflect the same filter context
+And:   Only WOs matching the applied filter should be displayed
+
+TC-032: Table Renders Without Errors on Page Load
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  The page loads with data available
+Then:  The table should render completely without any visual errors,
+         blank panels, or loading spinners that do not resolve
+
+TC-033: Empty State — No Data Available
+--------------------------------------------------------------------------------
+Given: I am viewing page "5 | Closed WO Details"
+When:  All filters result in no matching WO records
+Then:  The table should display an appropriate empty state message (e.g., "No data available")
+And:   No error or broken visual should appear
